@@ -45,13 +45,13 @@ export function getWallet() {
 export async function getSafeService() {
     if(safeService) return safeService;
 
-    const txServiceUrl = TX_SERVICE_URL[getChainID()];
+    const txServiceUrl = TX_SERVICE_URL[await getChainID()];
     safeService = new SafeApiKit({ txServiceUrl, ethAdapter: getEthAdapter() });
     return safeService;
 }
 
 export async function getSafeSDK(safeAddress: string) {
-    if(safeSDK[safeAddress]) return safeSDK[safeAddress];
+    if(safeSDK?.[safeAddress]) return safeSDK[safeAddress];
     safeSDK[safeAddress] = await Safe.create({ ethAdapter: getEthAdapter(), safeAddress });
 
     return safeSDK[safeAddress];
@@ -69,6 +69,6 @@ export function reset() {
     safeService = null as any;
     provider = null as any;
     wallet = null as any;
-    safeSDK = null as any;
+    safeSDK = {} as any;
     safeFactory = null as any;
 }

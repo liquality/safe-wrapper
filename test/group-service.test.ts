@@ -26,19 +26,20 @@ describe('Group Service', () => {
     
     // Get group info
     const groupInfo = await GroupService.getGroupInfo(safeAddress);
-    expect(groupInfo.owners.includes[member1.address]).toBe(true);
+    expect(groupInfo.owners.includes(member1.address)).toBe(true);
     expect(groupInfo.owners.length).toBe(1);
     expect(groupInfo.threshold).toBe(1);
   }, timeout);
 
   test('should add a group member and change minApprovals to 2', async () => {
+    setup(setupConfig);
     const txHash =  await GroupService.addMember(safeAddress, member2.address, 2);
     console.log(" txHash => ", txHash);
     expect(txHash).toBeTruthy();
 
     // Get group info
     const groupInfo = await GroupService.getGroupInfo(safeAddress);
-    expect(groupInfo.owners.includes[member2.address]).toBe(true);
+    expect(groupInfo.owners.includes(member2.address)).toBe(true);
     expect(groupInfo.owners.length).toBe(2);
     expect(groupInfo.threshold).toBe(2);
   }, timeout);
@@ -62,8 +63,8 @@ describe('Group Service', () => {
 
     // Get group info
     const groupInfo = await GroupService.getGroupInfo(safeAddress);
-    expect(groupInfo.owners.includes[member3.address]).toBe(true);
-    expect(groupInfo.owners.includes[member4.address]).toBe(true);
+    expect(groupInfo.owners.includes(member3.address)).toBe(true);
+    expect(groupInfo.owners.includes(member4.address)).toBe(true);
     expect(groupInfo.owners.length).toBe(4);
     expect(groupInfo.threshold).toBe(2);
 

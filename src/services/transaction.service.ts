@@ -109,12 +109,12 @@ export abstract class TransactionService {
     const relayTransaction: RelayTransaction = {
       target: safeAddress,
       encodedTransaction: encodedTx,
-      chainId: getChainID()
+      chainId: await getChainID()
     }
 
     const response = await relayKit.relayTransaction(relayTransaction);
     const taskID = response.taskId;
-
+    console.log('Task id => ', taskID);
     // Check at intervals until transaction is successful
     const hash = await withInterval( async () => {
       const response = await fetchGet(`https://relay.gelato.digital/tasks/status/${taskID}`);

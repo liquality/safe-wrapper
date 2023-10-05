@@ -18,8 +18,8 @@ export function getSafeOwnerAddress() {
   return getWallet().address;
 }
 
-export function getChainID() {
-  return Number(getProvider()._network.chainId);
+export async function getChainID() {
+  return Number((await getProvider().getNetwork()).chainId);
 }
 
 

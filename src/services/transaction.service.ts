@@ -8,8 +8,20 @@ import { getGelatoRelayApiKey } from '../setup';
 
 export abstract class TransactionService {
 
+  /**
+   * 
+   * @param safeAddress 
+   * @param tx 
+   * @returns {txHash} for transaction requiring no further approval or {safeTxHash} for transactions requiring more approvals
+   */
   public static async proposeTransaction(safeAddress: string, tx: SafeTransaction ) {
     const safeSDK = await getSafeSDK(safeAddress);
+
+    if(await safeSDK.getThreshold() == 1) {
+      const txHash =  await TransactionService.executeTransaction(safeAddress, tx);
+      return {txHash}
+    } 
+
     const safeService = await getSafeService();
     const safeTxHash = await safeSDK.getTransactionHash(tx);
     const senderSignature = await safeSDK.signTransactionHash(safeTxHash);
@@ -22,7 +34,7 @@ export abstract class TransactionService {
       origin: APP_NAME,
     })
 
-    return safeTxHash;
+    return {safeTxHash};
 
   }
 
@@ -42,6 +54,12 @@ export abstract class TransactionService {
     return tx;
   }
 
+  /**
+   * 
+   * @param safeAddress 
+   * @param safeTxHash 
+   * @returns signature or txHash (if this vote satisfies the threshold)
+   */
   public static async voteTransaction(safeAddress: string, safeTxHash: string) {
 
     const safeSDK = await getSafeSDK(safeAddress);
@@ -58,7 +76,7 @@ export abstract class TransactionService {
 
   }
 
-  public static async executeTransaction(safeAddress: string, safeTransaction: SafeMultisigTransactionResponse) {
+  public static async executeTransaction(safeAddress: string, safeTransaction: SafeMultisigTransactionResponse| SafeTransaction): Promise<string> {
     const safeSDK = await getSafeSDK(safeAddress);
 
     const isValidTx = await safeSDK.isValidTransaction(safeTransaction);

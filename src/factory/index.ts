@@ -1,7 +1,7 @@
 import { providers, Wallet, ethers } from 'ethers'
 import SafeApiKit from '@safe-global/api-kit'
 import { getRpcUrl } from '../setup';
-import { TX_SERVICE_URL } from 'src/common/constants';
+import { TX_SERVICE_URL } from '../common/constants';
 import Safe, { SafeFactory, EthersAdapter } from '@safe-global/protocol-kit'
 import { getChainID } from '../common/utils';
 
@@ -62,4 +62,13 @@ export async function getSafeFactory() {
     if(safeFactory) return safeFactory; 
     safeFactory = await SafeFactory.create({ ethAdapter });
     return safeFactory;
+}
+
+export function reset() {
+    ethAdapter = null as any;
+    safeService = null as any;
+    provider = null as any;
+    wallet = null as any;
+    safeSDK = null as any;
+    safeFactory = null as any;
 }

@@ -16,12 +16,15 @@ export abstract class GroupService {
     return safeSDk.getAddress();
   }
 
+  public static async createGroupGaslessly(addresses: string[], minApprovals: number) {
+    // @todo call backend here
+  }
+
   public static async addMember(safeAddress: string, address: string, minApprovals?: number) {
     const safeSDK = await getSafeSDK(safeAddress);
     
     const safeTx = await safeSDK.createAddOwnerTx({ownerAddress: address, threshold: minApprovals});
-    
-    await TransactionService.proposeTransaction(safeAddress, safeTx);
+    return await TransactionService.proposeTransaction(safeAddress, safeTx);
         
   }
 
@@ -44,7 +47,7 @@ export abstract class GroupService {
     const safeTransactionData: SafeTransactionDataPartial = {data: tx.data, to: safeSDK.getMultiSendCallOnlyAddress(), value: '0', operation: OperationType.DelegateCall};
     const finalSafeTx = await safeSDK.createTransaction({safeTransactionData});
     
-    await TransactionService.proposeTransaction(safeAddress, finalSafeTx);
+    return await TransactionService.proposeTransaction(safeAddress, finalSafeTx);
         
   }
 
@@ -56,5 +59,12 @@ export abstract class GroupService {
   public static async getGroupInfo(address: string) {
     const safeService = await getSafeService();
     return await safeService.getSafeInfo(address);
+  }
+
+  public static async changeMinApprovals(safeAddress: string, minApprovals: number) {
+    const safeSDK = await getSafeSDK(safeAddress);
+    const safeService = await getSafeService();
+    const safeTx = await safeSDK.createChangeThresholdTx(minApprovals);
+    return await TransactionService.proposeTransaction(safeAddress, safeTx);
   }
 }

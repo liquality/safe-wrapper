@@ -1,4 +1,4 @@
-import { getProvider, getWallet } from "src/factory";
+import { getProvider, getWallet } from "../factory";
 import { random } from "lodash";
 
 export async function fetchGet(url: string, params?: any) {

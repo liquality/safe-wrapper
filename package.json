@@ -3,7 +3,7 @@
   "repository": {
     "url": "https://github.com/liquality/safe-wrapper.git"
   },
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
   "files": [
@@ -34,6 +34,7 @@
     "@safe-global/protocol-kit": "^1.3.0",
     "@safe-global/relay-kit": "^1.3.0",
     "@safe-global/safe-core-sdk-types": "^2.3.0",
+    "axios": "^1.5.1",
     "ethers": "^5.7.2",
     "lodash": "^4.17.21"
   },

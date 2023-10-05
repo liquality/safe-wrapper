@@ -2,13 +2,14 @@ import { SafeAccountConfig } from "@safe-global/protocol-kit";
 import { getSafeFactory, getSafeSDK, getSafeService } from "../factory";
 import { MetaTransactionData, OperationType, SafeTransactionData, SafeTransactionDataPartial } from '@safe-global/safe-core-sdk-types';
 import { TransactionService } from "./transaction.service";
+import ServerService from "./server.service";
 
 export abstract class GroupService {
 
-  public static async createGroup(addresses: string[], minApprovals: number) {
+  public static async createGroup(members: string[], minApprovals: number) {
     const safeFactory = await getSafeFactory();
     const safeAccountConfig: SafeAccountConfig = {
-      owners: addresses,
+      owners: members,
       threshold: minApprovals
     }
     const safeSDk = await safeFactory.deploySafe({safeAccountConfig});
@@ -16,8 +17,9 @@ export abstract class GroupService {
     return safeSDk.getAddress();
   }
 
-  public static async createGroupGaslessly(addresses: string[], minApprovals: number) {
-    // @todo call backend here
+  public static async createGroupGaslessly(members: string[], minApprovals: number) {
+    const {safeAddress} = await ServerService.postResource('/v1/group', {members, minApprovals});
+    return safeAddress;
   }
 
   public static async addMember(safeAddress: string, address: string, minApprovals?: number) {

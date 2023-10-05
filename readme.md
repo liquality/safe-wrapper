@@ -13,6 +13,7 @@ A wrapper sdk for the interacting with safe backend service and safe protocols. 
 - run `yarn install`
 - make changes
 - update the [.npmrc file](.npmrc)
+- Be sure to have *SERVER_ADDRESS* set in your **.env** file (The server is needed amongst other things, to create a safe gasleslly);
 - run `yarn build`
 - run `yarn publish`
 

@@ -19,7 +19,7 @@ describe('Group Service', () => {
 
   test('should create a group', async () => {
     setup(setupConfig);
-    safeAddress =  GroupService.createGroup([member1.address], 1);
+    safeAddress =  await GroupService.createGroup([member1.address], 1);
     console.log('safeAddress => ', safeAddress);
     expect(safeAddress).toBeTruthy();
     

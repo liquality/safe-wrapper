@@ -36,16 +36,17 @@ export abstract class GroupService {
     let eachSafeTx;
     for(let i = 0; i < addresses.length; i++){
       eachSafeTx = await safeSDK.createAddOwnerTx({ownerAddress: addresses[i]})
-      txs.push({data: eachSafeTx.data.data, to: eachSafeTx.data.to, value: eachSafeTx.data.value});
+      txs.push({data: eachSafeTx.data.data, to: eachSafeTx.data.to, value: eachSafeTx.data.value, operation: eachSafeTx.data.operation});
     }
 
     if(minApprovals) {
       eachSafeTx = await safeSDK.createChangeThresholdTx(minApprovals)
 
-      txs.push({data: eachSafeTx.data.data, to: eachSafeTx.data.to, value: eachSafeTx.data.value});
+      txs.push({data: eachSafeTx.data.data, to: eachSafeTx.data.to, value: eachSafeTx.data.value, operation: eachSafeTx.data.operation});
     }
 
     const tx =  await safeSDK.createTransactionBatch(txs);
+
     const safeTransactionData: SafeTransactionDataPartial = {data: tx.data, to: safeSDK.getMultiSendCallOnlyAddress(), value: '0', operation: OperationType.DelegateCall};
     const finalSafeTx = await safeSDK.createTransaction({safeTransactionData});
     

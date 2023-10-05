@@ -1,4 +1,4 @@
-import { RelayTransaction, SafeMultisigTransactionResponse, SafeTransaction } from '@safe-global/safe-core-sdk-types';
+import { MetaTransactionOptions, RelayTransaction, SafeMultisigTransactionResponse, SafeTransaction } from '@safe-global/safe-core-sdk-types';
 import { getSafeSDK, getSafeService } from '../factory';
 import { fetchGet, getChainID, getSafeOwnerAddress, withInterval } from '../common/utils';
 import { APP_NAME } from '../common/constants';
@@ -66,7 +66,7 @@ export abstract class TransactionService {
     let safeSignature = await safeSDK.signTransactionHash(safeTxHash);
 
     const safeService = await getSafeService();
-    const signature =  safeService.confirmTransaction(safeTxHash, safeSignature.data);
+    const signature =  await safeService.confirmTransaction(safeTxHash, safeSignature.data);
     const safeTransaction = await this.getTransactionBySafeTxHash(safeTxHash);
 
     const {confirmationsRequired, confirmations} = safeTransaction;
@@ -105,11 +105,16 @@ export abstract class TransactionService {
       signedSafeTx.encodedSignatures()
     ])
 
+    const options: MetaTransactionOptions = {
+      isSponsored: true
+    }
+
     // Send Transaction to relay
     const relayTransaction: RelayTransaction = {
       target: safeAddress,
       encodedTransaction: encodedTx,
-      chainId: await getChainID()
+      chainId: await getChainID(),
+      options
     }
 
     const response = await relayKit.relayTransaction(relayTransaction);

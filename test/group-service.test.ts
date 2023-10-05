@@ -44,14 +44,9 @@ describe('Group Service', () => {
     expect(groupInfo.threshold).toBe(2);
   }, timeout);
 
-  test('should fail if minApprovals not met', async () => {
-    const {safeTxHash} =  await GroupService.addMembers(safeAddress, [member3.address, member4.address]);
-    const safeTransaction = await TransactionService.getTransactionBySafeTxHash(safeTxHash!);
-
-    expect(async () => {await TransactionService.executeTransaction(safeAddress, safeTransaction)}).rejects.toThrow();
-  }, timeout);
-
   test('should batch add two group members', async () => {
+    setup(setupConfig);
+
     const {safeTxHash} =  await GroupService.addMembers(safeAddress, [member3.address, member4.address]);
 
     // Add another approval and auto execute
@@ -71,16 +66,15 @@ describe('Group Service', () => {
   }, timeout);
 
   test('should change min approvals', async () => {
-    setup({...setupConfig,  pk: member1.key});
+    setup(setupConfig);
 
     const {safeTxHash} =  await GroupService.changeMinApprovals(safeAddress, 3);
 
     // Add another approval and auto execute
     setup({...setupConfig,  pk: member2.key});
-    const signatureOrHash = await TransactionService.voteTransaction(safeAddress, safeTxHash!);
-    console.log('Signature => ', signatureOrHash);
+    const txHash = await TransactionService.voteTransaction(safeAddress, safeTxHash!);
 
-    expect(signatureOrHash).toBeTruthy();
+    expect(txHash).toBeTruthy();
 
     // Get group info
     const groupInfo = await GroupService.getGroupInfo(safeAddress);

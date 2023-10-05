@@ -1,17 +1,26 @@
 import { getProvider, getWallet } from "../factory";
 import { random } from "lodash";
+import axios from 'axios';
+
+// export async function fetchGet(url: string, params?: any) {
+//   if(params) url =  `${url}?${(new URLSearchParams(params)).toString()}`;
+//   const response: any = await fetch(url, {
+//     method: 'GET', // *GET, POST, PUT, DELETE, etc.
+//     mode: 'cors', // no-cors, *cors, same-origin
+//     headers: {
+//       'Content-Type': 'application/json'
+//     },
+//   });
+
+//   return response.json();
+// }
+
 
 export async function fetchGet(url: string, params?: any) {
   if(params) url =  `${url}?${(new URLSearchParams(params)).toString()}`;
-  const response: any = await fetch(url, {
-    method: 'GET', // *GET, POST, PUT, DELETE, etc.
-    mode: 'cors', // no-cors, *cors, same-origin
-    headers: {
-      'Content-Type': 'application/json'
-    },
-  });
 
-  return response.json();
+  const response = await axios.get(url);
+  return response.data;
 }
 
 export function getSafeOwnerAddress() {

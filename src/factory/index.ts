@@ -60,7 +60,7 @@ export async function getSafeSDK(safeAddress: string) {
 
 export async function getSafeFactory() {
     if(safeFactory) return safeFactory; 
-    safeFactory = await SafeFactory.create({ ethAdapter });
+    safeFactory = await SafeFactory.create({ ethAdapter: getEthAdapter() });
     return safeFactory;
 }
 

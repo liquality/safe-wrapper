@@ -3,7 +3,7 @@
   "repository": {
     "url": "https://github.com/liquality/safe-wrapper.git"
   },
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
   "files": [

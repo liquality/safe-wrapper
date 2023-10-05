@@ -10,6 +10,7 @@ dotenv.config();
  * Change threshold to 2
  */
 describe('Group Service', () => {
+  const timeout = 60000;
   let safeAddress;
   const setupConfig = {pk: process.env.PRIVATE_KEY1!, rpcUrl: process.env.RPC_URL!, gelatoRelayApiKey: process.env.GELATO_RELAY_API_KEY!, appName: process.env.APP_NAME!};
   const member1 = {address: process.env.OWNER1!, key: process.env.PRIVATE_KEY1!};
@@ -28,7 +29,7 @@ describe('Group Service', () => {
     expect(groupInfo.owners.includes[member1.address]).toBe(true);
     expect(groupInfo.owners.length).toBe(1);
     expect(groupInfo.threshold).toBe(1);
-  });
+  }, timeout);
 
   test('should add a group member and change minApprovals to 2', async () => {
     const txHash =  await GroupService.addMember(safeAddress, member2.address, 2);
@@ -40,14 +41,14 @@ describe('Group Service', () => {
     expect(groupInfo.owners.includes[member2.address]).toBe(true);
     expect(groupInfo.owners.length).toBe(2);
     expect(groupInfo.threshold).toBe(2);
-  });
+  }, timeout);
 
   test('should fail if minApprovals not met', async () => {
     const {safeTxHash} =  await GroupService.addMembers(safeAddress, [member3.address, member4.address]);
     const safeTransaction = await TransactionService.getTransactionBySafeTxHash(safeTxHash!);
 
     expect(async () => {await TransactionService.executeTransaction(safeAddress, safeTransaction)}).rejects.toThrow();
-  });
+  }, timeout);
 
   test('should batch add two group members', async () => {
     const {safeTxHash} =  await GroupService.addMembers(safeAddress, [member3.address, member4.address]);
@@ -66,7 +67,7 @@ describe('Group Service', () => {
     expect(groupInfo.owners.length).toBe(4);
     expect(groupInfo.threshold).toBe(2);
 
-  });
+  }, timeout);
 
   test('should change min approvals', async () => {
     setup({...setupConfig,  pk: member1.key});
@@ -84,5 +85,5 @@ describe('Group Service', () => {
     const groupInfo = await GroupService.getGroupInfo(safeAddress);
     expect(groupInfo.threshold).toBe(3);
 
-  });
+  }, timeout);
 });

@@ -1,4 +1,4 @@
-import { getProvider, getWallet } from "../factory";
+import { getProvider, getSigner } from "../factory";
 import { random } from "lodash";
 import axios from 'axios';
 
@@ -23,8 +23,9 @@ export async function fetchGet(url: string, params?: any) {
   return response.data;
 }
 
-export function getSafeOwnerAddress() {
-  return getWallet().address;
+export function getSafeOwnerAddress(): Promise<string> {
+  const signer = getSigner();
+  return signer.getAddress();
 }
 
 export async function getChainID() {

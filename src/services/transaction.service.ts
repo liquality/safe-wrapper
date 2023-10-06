@@ -25,11 +25,12 @@ export abstract class TransactionService {
     const safeService = await getSafeService();
     const safeTxHash = await safeSDK.getTransactionHash(tx);
     const senderSignature = await safeSDK.signTransactionHash(safeTxHash);
+    const senderAddress = await getSafeOwnerAddress();
     await safeService.proposeTransaction({
       safeAddress,
       safeTransactionData: tx.data,
       safeTxHash,
-      senderAddress:getSafeOwnerAddress(),
+      senderAddress,
       senderSignature: senderSignature.data,
       origin: APP_NAME,
     })

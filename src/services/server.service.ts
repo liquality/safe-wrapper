@@ -1,9 +1,6 @@
-const serverAddress = process.env.SERVER_ADDRESS
-  ? process.env.SERVER_ADDRESS
-  : "http://localhost:3000";
+import { getServerAddress } from "../setup";
 
 export const ServerService = {
-
   postResource: function (url: string, data: any): Promise<any> {
     var promise = new Promise((resolve, reject) => {
       var headers = {
@@ -16,8 +13,8 @@ export const ServerService = {
         headers: headers,
         body: JSON.stringify(data),
       };
-
-      fetch(serverAddress + url, request)
+      const baseUrl = getServerAddress();
+      fetch(baseUrl + url, request)
         .then((response) => {
           return ServerService.handleJsonResponse(response);
         })
@@ -48,7 +45,7 @@ export const ServerService = {
         });
     });
     return promise;
-  }
+  },
 };
 
 export default ServerService;

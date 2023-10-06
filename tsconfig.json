@@ -2,8 +2,9 @@
   "compilerOptions": {
     "outDir": "./dist",
     "baseUrl": "./",
-    "target": "es2020",
-    "module": "commonjs",
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -24,7 +25,6 @@
     "declarationMap": true,
     "inlineSources": false,
     "isolatedModules": true,
-    "moduleResolution": "node",
     "preserveWatchOutput": true,
 
   },
